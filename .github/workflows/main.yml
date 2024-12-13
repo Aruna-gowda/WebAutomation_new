@@ -1,0 +1,66 @@
+name: Playwright Test with Allure
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install Dependencies
+      run: |
+        npm install
+
+    - name: Run Playwright Tests
+      env:
+        DOTENV_CONFIG_PATH: .env
+      run: |
+        npx playwright install
+        npx playwright test --reporter=line,allure-playwright
+
+    - name: Generate Allure Report
+      run: |
+        npx allure generate allure-results --clean -o allure-report
+
+    - name: Upload Allure Report as Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: allure-report
+        path: allure-report
+
+    - name: Deploy Allure Report to GitHub Pages
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./allure-report
+
+    - name: Send Results to Slack (Optional)
+      if: success() || failure()
+      env:
+        SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+        SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+      run: |
+        node <<EOF
+        const { WebClient } = require('@slack/web-api');
+        const slackClient = new WebClient(process.env.SLACK_TOKEN);
+        const message = {
+          channel: process.env.SLACK_CHANNEL,
+          text: `Playwright Test Results: ${{ github.run_number }}\nStatus: ${{ job.status }}\nAllure Report: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`
+        };
+        (async () => {
+          await slackClient.chat.postMessage(message);
+        })();
+        EOF
