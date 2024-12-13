@@ -1,36 +1,31 @@
-const { test, expect } = require('@playwright/test');
+console.log("hello")
+// // Load environment variables from the .env file
+// // require('dotenv').config();
 
-// Generic method to enter OTP
-async function enterOtp(page, otp) {
-    // Split the OTP into individual characters
-    const otpCharacters = otp.split('');
+// // Access the environment variables
+// const slackToken = process.env.SLACK_TOKEN;
+// const slackChannel = process.env.SLACK_CHANNEL;
 
-    // Iterate over each character and fill it into the corresponding input box
-    for (let i = 0; i < otpCharacters.length; i++) {
-        const locator = `[aria-label='Please enter OTP character ${i + 1}']`;
-        await page.locator(locator).fill(otpCharacters[i]);
-    }
-}
+// const { test, expect } = require('@playwright/test');
 
-// Example usage in a test
-test('Fill OTP in the verification fields', async ({ page }) => {
-    // Navigate to the application
-    await page.goto('https://stage-app.edifyai.com/login'); // Update with your app URL
+// // Playwright test to send a message to Slack
+// test('send message to Slack', async ({ page }) => {
+//   // Ensure the environment variables are correctly loaded
+//   console.log(slackToken);  // Prints the SLACK_TOKEN
+//   console.log(slackChannel);  // Prints the SLACK_CHANNEL
 
-  
-    await page.locator('//input[@class="MuiInputBase-input MuiInput-input MuiInputBase-inputAdornedEnd css-mnn31"]').fill("aruna.gowda984@gmail.com");
-    await page.locator('[data-testid="FormContinueOrSigninButton"]').click;
+//   // Example request to Slack API to send a message
+//   const response = await page.request.post('https://slack.com/api/chat.postMessage', {
+//     headers: {
+//       'Authorization': `Bearer ${slackToken}`,
+//       'Content-Type': 'application/json',
+//     },
+//     data: {
+//       channel: slackChannel,
+//       text: 'Hello from Playwright!',
+//     },
+//   });
 
-
-    // Assume OTP is generated as 234598
-    const otp = '234598';
-
-    // Call the generic method to fill the OTP
-    await enterOtp(page, otp);
-
-    // Optionally, assert that fields are filled correctly
-    for (let i = 0; i < otp.length; i++) {
-        const locator = `[aria-label='Please enter OTP character ${i + 1}']`;
-        await expect(page.locator(locator)).toHaveValue(otp[i]);
-    }
-});
+//   // Validate the response
+//   expect(response.status()).toBe(200);
+// });
