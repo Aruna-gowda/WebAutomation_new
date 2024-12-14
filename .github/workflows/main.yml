@@ -47,13 +47,17 @@ jobs:
           publish_dir: ./allure-report
           publish_branch: gh-pages
 
-      - name: Send Allure Report to Slack
+      - name: Notify Slack with Allure Report Link
         if: always()
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_SHA: ${{ github.sha }}
         run: |
           REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           curl -X POST \
-            -H "Content-Type: application/json" \
-            --data '{"text":"Allure Report is available: '$REPORT_URL'"}' \
-            $SLACK_WEBHOOK_URL
+            -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+            -H "Content-type: application/json" \
+            --data '{"channel":"'$SLACK_CHANNEL_ID'","text":"Allure Report is available: '$REPORT_URL'"}' \
+            https://slack.com/api/chat.postMessage
