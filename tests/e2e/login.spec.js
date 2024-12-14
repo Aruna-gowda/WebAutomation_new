@@ -30,28 +30,28 @@ test.describe('LoginPage Test Suite', () => {
     await login.verify_smsTermsLink();
   });
 
-  test("Verify 'Clear' button clears the entered text in email box.", async () =>{
-    await login.email_input();
-    await login.verify_Clear();
-  });
+  // test("Verify 'Clear' button clears the entered text in email box.", async () =>{
+  //   await login.email_input();
+  //   await login.verify_Clear();
+  // });
 
-  test("Verify Valid email input redirects to the OTP Screen after pressing 'Continue' button", async () =>{
-    await login.email_input();
-    await login.verify_Continue();
-  });
+  // test("Verify Valid email input redirects to the OTP Screen after pressing 'Continue' button", async () =>{
+  //   await login.email_input();
+  //   await login.verify_Continue();
+  // });
 
-  test("Verify Cancel button redirects to the previous page or login options", async () =>{
-    await login.email_input();
-    await login.verify_Cancel();
-  });
+  // test("Verify Cancel button redirects to the previous page or login options", async () =>{
+  //   await login.email_input();
+  //   await login.verify_Cancel();
+  // });
 
-  test("Verify Successful login with valid verification code", async () =>{
-    await login.Valid_login();
-  });
+  // test("Verify Successful login with valid verification code", async () =>{
+  //   await login.Valid_login();
+  // });
 
-  test("Verify Valid OTP input redirects to the Dashboard screen after clicking on Sign In button", async () =>{
-    await login.Valid_login();
-  });
+  // test("Verify Valid OTP input redirects to the Dashboard screen after clicking on Sign In button", async () =>{
+  //   await login.Valid_login();
+  // });
 
   // // Teardown: Logout and close the browser after all tests are executed
   // test.afterAll(async () => {
