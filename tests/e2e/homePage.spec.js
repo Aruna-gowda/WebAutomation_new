@@ -3,17 +3,18 @@
 // const { HomePage } = require('../../pages/homePage'); // Adjusted path for HomePage
 
 // test.describe('HomePage Test Suite', () => {
-//   let login; // Declare the LoginPage instance
-//   let page;
-//   let homePage; // Declare the HomePage instance
+// let login; // Declare the LoginPage instance
+// let homePage; // Declare the HomePage instance
+// let browser;
+// let page;
 
-//   test.beforeAll(async ({ browser }) => {
+// test.beforeAll(async () => {
+//     browser = await require('playwright').chromium.launch();  // or use .firefox/.webkit based on your need
 //     page = await browser.newPage();
-//     login = new LoginPage(page); // Initialize LoginPage instance
-//     homePage = new HomePage(page); // Initialize HomePage instance
-//     await login.Valid_login(); // Perform login before tests
-//   });
-
+//     login = new LoginPage(page);
+//     homePage = new HomePage(page);
+//     await login.Valid_login();  
+// });
   
 
 //   test('TC001_Verify title (Safety Mojo) of the homepage', async () => {

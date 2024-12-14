@@ -13,11 +13,6 @@ test.describe('LoginPage Test Suite', () => {
     await login.openUrl();  // Replace with your login method
   });
 
-  // test.beforeEach(async ({ page }) => {
-  //   login = new LoginPage(page); // Initialize the LoginPage instance
-  //   await login.openUrl(); // Open the application URL
-  // });
-
   test("verify_SecurityPolicyLink", async () => {
     await login.verify_securityPolicyLink();
   });
@@ -53,10 +48,10 @@ test.describe('LoginPage Test Suite', () => {
   //   await login.Valid_login();
   // });
 
-  // // Teardown: Logout and close the browser after all tests are executed
-  // test.afterAll(async () => {
-  //   // await login.performLogout();  // Replace with your logout method
-  //   await browser.close();
-  // });
+  // // // Teardown: Logout and close the browser after all tests are executed
+  // // test.afterAll(async () => {
+  // //   // await login.performLogout();  // Replace with your logout method
+  // //   await browser.close();
+  // // });
 
 });
