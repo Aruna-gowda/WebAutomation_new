@@ -1,4 +1,4 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"passed","Wed Dec 18 08:39:20 UTC 2024","Wed Dec 18 08:39:21 UTC 2024","58","chromium","login.spec.js","LoginPage Test Suite","","","verify_smsTermsLink",""
-"passed","Wed Dec 18 08:39:20 UTC 2024","Wed Dec 18 08:39:20 UTC 2024","62","chromium","login.spec.js","LoginPage Test Suite","","","verify_privacyPolicyLink",""
-"passed","Wed Dec 18 08:39:11 UTC 2024","Wed Dec 18 08:39:12 UTC 2024","201","chromium","login.spec.js","LoginPage Test Suite","","","verify_SecurityPolicyLink",""
+"passed","Wed Dec 18 08:46:10 UTC 2024","Wed Dec 18 08:46:10 UTC 2024","73","chromium","login.spec.js","LoginPage Test Suite","","","verify_smsTermsLink",""
+"passed","Wed Dec 18 08:46:10 UTC 2024","Wed Dec 18 08:46:10 UTC 2024","67","chromium","login.spec.js","LoginPage Test Suite","","","verify_privacyPolicyLink",""
+"passed","Wed Dec 18 08:45:53 UTC 2024","Wed Dec 18 08:45:53 UTC 2024","218","chromium","login.spec.js","LoginPage Test Suite","","","verify_SecurityPolicyLink",""
