@@ -3,8 +3,8 @@ name: Web Automation testcases
 on:
   workflow_dispatch: # Enable manual trigger
   schedule:
-    - cron: '30 5 * * *' # 11 AM IST (UTC +5:30) for stage
-    - cron: '30 8 * * *' # 2 PM IST (UTC +5:30) for epic
+    - cron: '32 18 * * *' # 12:02 AM IST (UTC +5:30) for stage
+    - cron: '30 8 * * *'  # 2:00 PM IST (UTC +5:30) for epic
 
 jobs:
   test:
@@ -20,7 +20,7 @@ jobs:
 
       - name: Define Environment Variable
         run: |
-          if [[ "${{ github.event.schedule }}" == '30 5 * * *' ]]; then
+          if [[ "${{ github.event.schedule }}" == '32 18 * * *' ]]; then
             echo "ENVIRONMENT_NAME=stage" >> $GITHUB_ENV
           elif [[ "${{ github.event.schedule }}" == '30 8 * * *' ]]; then
             echo "ENVIRONMENT_NAME=epic" >> $GITHUB_ENV
