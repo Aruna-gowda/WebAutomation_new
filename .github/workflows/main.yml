@@ -1,11 +1,10 @@
-name: Playwright Tests with Allure Report
+name: Web Automation testcases
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
   workflow_dispatch: # Enable manual trigger
+  schedule:
+    - cron: '30 5 * * *' # 11 AM IST (UTC +5:30) for stage
+    - cron: '30 8 * * *' # 2 PM IST (UTC +5:30) for epic
 
 jobs:
   test:
@@ -19,34 +18,49 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Define Environment Variable
+        run: |
+          if [[ "${{ github.event.schedule }}" == '30 5 * * *' ]]; then
+            echo "ENVIRONMENT_NAME=stage" >> $GITHUB_ENV
+          elif [[ "${{ github.event.schedule }}" == '30 8 * * *' ]]; then
+            echo "ENVIRONMENT_NAME=epic" >> $GITHUB_ENV
+          fi
+
+      - name: Replace &ENVIRONMENT_NAME in config.ini
+        run: |
+          sed -i "s/&ENVIRONMENT_NAME/${{ env.ENVIRONMENT_NAME }}/g" config/config.ini
+          echo "Updated config.ini content:"
+          cat config/config.ini
+
       - name: Install dependencies
         run: |
           npm ci
           npx playwright install --with-deps
 
-      - name: Install Allure Commandline
-        run: |
-          curl -o allure-2.20.1.tgz -OL https://github.com/allure-framework/allure2/releases/download/2.20.1/allure-2.20.1.tgz
-          tar -zxvf allure-2.20.1.tgz
-          sudo mv allure-2.20.1 /opt/allure
-          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-
       - name: Run Playwright tests
+        env:
+          ENVIRONMENT_NAME: ${{ env.ENVIRONMENT_NAME }}
         run: |
-          npx playwright test --reporter=line,allure-playwright
+          npx playwright test --config=config/config.ini
 
       - name: Generate Allure Report
         if: always()
         run: |
-          allure generate ./allure-results -o allure-report --clean
+          WORKFLOW_RUN_NUMBER=${{ github.run_number }}
+          REPORT_DIR="allure-report-${WORKFLOW_RUN_NUMBER}"
+          allure generate ./allure-results -o $REPORT_DIR --clean
+          echo "report_dir=$REPORT_DIR" >> $GITHUB_ENV
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages with Unique URL
         if: always()
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GH_PAT }}
-          publish_dir: ./allure-report
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ${{ env.report_dir }}
           publish_branch: gh-pages
+          destination_dir: ${{ env.report_dir }} # Unique directory for each report
+          user_name: 'github-actions'
+          user_email: 'github-actions@github.com'
 
       - name: Notify Slack with Allure Report Link
         if: always()
@@ -54,11 +68,10 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
           SLACK_CHANNEL_ID: ${{ secrets.SLACK_CHANNEL_ID }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_SHA: ${{ github.sha }}
+          REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${{ env.report_dir }}
         run: |
-          REPORT_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
           curl -X POST \
             -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
             -H "Content-type: application/json" \
-            --data '{"channel":"'$SLACK_CHANNEL_ID'","text":"Mojo Web Automation Allure Report is available: '$REPORT_URL'"}' \
+            --data '{"channel":"'$SLACK_CHANNEL_ID'","text":"'$ENVIRONMENT_NAME' - Mojo Web Automation Report is available: '$REPORT_URL'"}' \
             https://slack.com/api/chat.postMessage
