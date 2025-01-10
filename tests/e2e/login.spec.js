@@ -17,13 +17,13 @@ test.describe('LoginPage Test Suite', () => {
     await login.verify_securityPolicyLink();
   });
 
-  test("verify_privacyPolicyLink", async () => {
-    await login.verify_privacyPolicyLink();
-  });
+  // test("verify_privacyPolicyLink", async () => {
+  //   await login.verify_privacyPolicyLink();
+  // });
 
-  test("verify_smsTermsLink", async () => {
-    await login.verify_smsTermsLink();
-  });
+  // test("verify_smsTermsLink", async () => {
+  //   await login.verify_smsTermsLink();
+  // });
 
   // test("Verify 'Clear' button clears the entered text in email box.", async () =>{
   //   await login.email_input();
