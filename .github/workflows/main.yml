@@ -3,7 +3,8 @@ name: Web Automation testcases
 on:
   workflow_dispatch: # Enable manual trigger
   schedule:
-    - cron: '32 18 * * *' # 12:02 AM IST (UTC +5:30) for stage
+    # - cron: '32 18 * * *' # 12:02 AM IST (UTC +5:30) for stage
+    - cron: '30 9 * * *' # 3:00 PM IST (UTC +5:30) for stage
     - cron: '30 8 * * *'  # 2:00 PM IST (UTC +5:30) for epic
 
 jobs:
